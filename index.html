@@ -1,0 +1,62 @@
+<!--
+  This file is part of CPEE-layout.
+
+  CPEE-layout is free software: you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free Software
+  Foundation, either version 3 of the License, or (at your option) any later
+  version.
+
+  CPEE-layout is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+  details.
+
+  You should have received a copy of the GNU General Public License along with
+  CPEE-layout (file COPYING in the main directory). If not, see
+  <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>CPEE Layout Test</title>
+
+    <!-- libs, do not modify. When local than load local libs. -->
+    <script type="text/javascript" src="https://cpee.org/js_libs/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cpee.org/js_libs/util.js"></script>
+
+    <!-- modelling ui -->
+    <script type="text/javascript" src="wfadaptor.js"></script>
+    <link rel="stylesheet" href="wfadaptor.css" type="text/css"/>
+
+    <!-- integration -->
+    <script>
+      $(document).ready(() => {
+        $.ajax({
+          method: 'GET',
+          url: 'model.xml',
+          success: (data) => {
+            new WfAdaptor('themes/default/theme.js',function(graphrealization){
+              graphrealization.draw_labels = (max,labels,shift,striped) => {
+                console.log(labels);
+              };
+              graphrealization.set_svg_container($('#graphcanvas'));
+              graphrealization.set_label_container($('#graphgrid'));
+              graphrealization.set_description($(data), true);
+            });
+          },
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class='hidden' id='relaxngworker'></div>
+    <div id='graphcolumn'>
+      <div id='graphgrid'>
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:x="http://www.w3.org/1999/xlink" id='graphcanvas' width='1' height='1'></svg>
+      </div>
+    </div>
+  </body>
+</html>

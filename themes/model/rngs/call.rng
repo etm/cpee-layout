@@ -1,0 +1,70 @@
+<element xmlns="http://relaxng.org/ns/structure/1.0" xmlns:rngui="http://rngui.org" rngui:version="1.2" name="call" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://cpee.org/ns/description/1.0">
+  <attribute name="id" rngui:label="ID" rngui:default="javascript:get_free_id()">
+    <data type="string" rngui:readonly="true"/>
+  </attribute>
+  <attribute name="endpoint" rngui:label="Type">
+    <choice>
+      <value id="machine">Machine Invocation</value>
+      <value id="sensor">Read From Sensor</value>
+      <value id="human">Human Task</value>
+      <value id="subprocess">Subprocess</value>
+      <value id="robot">Robot Task</value>
+      <value id="robot_subprocess">Robot Subprocess</value>
+      <value id="plc">PLC</value>
+      <value id="send">Send Message</value>
+      <value id="receive">Receive Message</value>
+      <value id="wait">Wait</value>
+    </choice>
+  </attribute>
+  <element name="parameters" rngui:header="Properties">
+    <element name="label" rngui:label="Label">
+      <data type="string" rngui:label="Short description of the task"/>
+    </element>
+    <element name="arguments"/>
+  </element>
+  <element name="input" rngui:header="Documentation">
+    <element name="input" rngui:header="Input Arguments">
+      <zeroOrMore rngui:label="Create Argument">
+        <element name="item" rngui:label="Description">
+          <attribute name="label" rngui:label="Name">
+            <data type="string"/>
+          </attribute>
+          <text rngui:wrap="true" rngui:label="What does it do?"/>
+        </element>
+      </zeroOrMore>
+    </element>
+    <element name="output" rngui:header="Output Elements">
+      <zeroOrMore rngui:label="Create Element">
+        <element name="item" rngui:label="Description">
+          <attribute name="label" rngui:label="Name">
+            <data type="string"/>
+          </attribute>
+          <text rngui:wrap="true" rngui:label="What does it do?"/>
+        </element>
+      </zeroOrMore>
+    </element>
+    <element name="implementation" rngui:header="Implementation">
+      <element name="description" rngui:label="Description">
+        <text rngui:wrap="true" rngui:label="What is supposed to happen?"/>
+      </element>
+    </element>
+  </element>
+  <element name="annotations" rngui:header="Annotations">
+    <element name="_timing" rngui:header="Timing" rngui:fold="closed">
+      <element name="_timing_min" rngui:label="Min in min">
+        <data type="float" rngui:label="Minutes"/>
+      </element>
+      <element name="_timing_max" rngui:label="Max in min">
+        <data type="float" rngui:label="Minutes"/>
+      </element>
+      <element name="_timing_avg" rngui:label="Avg in min">
+        <data type="float" rngui:label="Minutes"/>
+      </element>
+    </element>
+    <element name="_notes" rngui:header="Notes" rngui:fold="closed">
+      <element name="_notes_general" rngui:label="General">
+        <text rngui:wrap="true" rngui:label="Notes"/>
+      </element>
+    </element>
+  </element>
+</element>
