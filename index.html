@@ -40,7 +40,7 @@
           success: (data) => {
             new WfAdaptor('themes/default/theme.js',function(graphrealization){
               graphrealization.draw_labels = (max,labels,shift,striped) => {
-                console.log(labels);
+                console.log(JSON.stringify(labels,  null, "  "));
               };
               graphrealization.set_svg_container($('#graphcanvas'));
               graphrealization.set_label_container($('#graphgrid'));
