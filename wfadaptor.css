@@ -1,18 +1,16 @@
 /*
-  This file is part of cpee-layout.
+  This file is part of CPEE.
 
-  cpee-layout is free software: you can redistribute it and/or modify it under
-  the terms of the GNU General Public License as published by the Free Software
-  Foundation, either version 3 of the License, or (at your option) any later
-  version.
+  CPEE is free software: you can redistribute it and/or modify it under the terms
+  of the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
 
-  cpee-layout is distributed in the hope that it will be useful, but WITHOUT
-  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-  details.
+  CPEE is distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along with
-  cpee-layout (file COPYING in the main directory). If not, see
+  CPEE (file COPYING in the main directory).  If not, see
   <http://www.gnu.org/licenses/>.
 */
 
@@ -20,7 +18,7 @@
   --wfadaptor-exec-passive: #729fcf;
   --wfadaptor-exec-active: #ef2929;
   --wfadaptor-exec-active-text: #cc0000;
-  --wfadaptor-exec-vote: #8ae234;
+  --wfadaptor-exec-vote: #8de5bcff;
   --wfadaptor-exec-vote-text: #73d216;
   --wfadaptor-highlight: #0081c7;
   --wfadaptor-base: #000000;
@@ -28,6 +26,7 @@
   --wfadaptor-label: #d4d4d4;
   --wfadaptor-mark: #d4d4d4;
   --wfadaptor-selected: #f57900;
+  --wfadaptor-hover: #f57900;
   --wfadaptor-stripe: #e9e9e9;
   --wfadaptor-background: #ffffff;
   --wfadaptor-menu: #ef2929;
@@ -44,12 +43,6 @@ svg rect.group {
   fill: var(--wfadaptor-highlight);
   fill-opacity: 0.2;
 }
-
-svg g.passive .rfill {
-  fill: var(--wfadaptor-exec-passive);
-  fill-opacity:1;
-}
-
 svg rect.stripe.even {
   fill: var(--wfadaptor-background);
 }
@@ -57,34 +50,50 @@ svg rect.stripe.odd {
   fill: var(--wfadaptor-stripe);
 }
 
-svg g.active .rfill {
-  fill: var(--wfadaptor-exec-active);
-  fill-opacity:1;
-}
-svg g.vote .rfill {
-  fill: var(--wfadaptor-exec-vote);
-  fill-opacity:1;
-}
-svg g.passive .rline {
+svg g.passive .execstyle {
   stroke: var(--wfadaptor-exec-passive);
+  stroke-width: 4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
-svg g.active .rline {
+svg g.active .execstyle {
   stroke: var(--wfadaptor-exec-active);
+  stroke-width: 4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
-svg g.vote .rline {
+svg g.vote .execstyle {
   stroke: var(--wfadaptor-exec-vote);
+  stroke-width: 4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 
-svg .rfill.menu {
-  fill: var(--wfadaptor-menu);
-  fill-opacity:1;
+svg g.passive .execstylethin {
+  stroke: var(--wfadaptor-exec-passive);
+  stroke-width: 2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
-svg .hfill.menu {
-  fill: var(--wfadaptor-menu);
-  fill-opacity:1;
+svg g.active .execstylethin {
+  stroke: var(--wfadaptor-exec-active);
+  stroke-width: 2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+svg g.vote .execstylethin {
+  stroke: var(--wfadaptor-exec-vote);
+  stroke-width: 2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 
-svg line.ourline, svg path.ourline {
+svg .menu {
+  fill: var(--wfadaptor-menu) !important;
+  fill-opacity:1 !important;
+}
+
+svg line.edge, svg path.edge {
   stroke-opacity:1;
   stroke: var(--wfadaptor-base);
   stroke-width: 2;
@@ -104,6 +113,15 @@ svg rect.tile {
   fill-opacity: 0.3;
   display: none;
 }
+svg .standline {
+  stroke: var(--wfadaptor-base);
+  stroke-width:1.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-miterlimit:4;
+  stroke-opacity:1;
+  stroke-dasharray:none;
+}
 svg .stand {
   fill: var(--wfadaptor-background);
   fill-opacity:1;
@@ -119,7 +137,7 @@ svg .standthin {
   fill: var(--wfadaptor-background);
   fill-opacity:1;
   stroke: var(--wfadaptor-base);
-  stroke-width:1.0;
+  stroke-width: 1.0 !important;
   stroke-linecap:round;
   stroke-linejoin:round;
   stroke-miterlimit:4;
@@ -200,18 +218,8 @@ svg .marked text.label {
   color: var(--wfadaptor-label);
   fill: var(--wfadaptor-label);
 }
-svg .marked .cfill {
-  fill: var(--wfadaptor-mark);
-  fill-opacity:1;
-  stroke: var(--wfadaptor-mark);
-  stroke-width:0.2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
-}
-svg .marked .cline {
+
+svg .marked .markstyle {
   stroke: var(--wfadaptor-mark);
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -220,22 +228,16 @@ svg .marked .cline {
   stroke-dasharray:none;
 }
 
-svg .selected text.label {
-  color: var(--wfadaptor-selected);
+svg.labelsrow text.label {
+  cursor: pointer;
+}
+svg.labelsrow text.label:hover, svg.labelsrow text.label.hover {
   fill: var(--wfadaptor-selected);
 }
-svg .selected .cfill {
+svg text.label.selected {
   fill: var(--wfadaptor-selected);
-  fill-opacity:1;
-  stroke: var(--wfadaptor-selected);
-  stroke-width:0.2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
 }
-svg .selected .cline {
+svg .selected .markstyle {
   stroke: var(--wfadaptor-selected);
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -289,7 +291,7 @@ svg text.normal {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
 }
 svg text.inverted {
   font-size:20px;
@@ -305,7 +307,7 @@ svg text.inverted {
   fill: var(--wfadaptor-background);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
 }
 
 svg text.super {
@@ -322,15 +324,40 @@ svg text.super {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
+}
+svg tspan.exec {
+  fill: var(--wfadaptor-exec-active-text);
+  display: none;
+
+  stroke: var(--wfadaptor-background);
+  stroke-width: 3px;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order: stroke markers fill;
+  font-family: adawaita-sans;
 }
 svg tspan.active {
   fill: var(--wfadaptor-exec-active-text);
   display: none;
+
+  stroke: var(--wfadaptor-background);
+  stroke-width: 3px;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order: stroke markers fill;
+  font-family: adawaita-sans;
 }
 svg tspan.vote {
   fill: var(--wfadaptor-exec-vote-text);
   display: none;
+
+  stroke: var(--wfadaptor-background);
+  stroke-width: 3px;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order: stroke markers fill;
+  font-family: adawaita-sans;
 }
 svg tspan.colon {
   display: none;
@@ -353,7 +380,7 @@ svg text.normallarge {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
 }
 
 svg text.small {
@@ -370,7 +397,7 @@ svg text.small {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
 }
 
 svg text.label {
@@ -385,8 +412,21 @@ svg text.label {
   color: var(--wfadaptor-base);
   fill: var(--wfadaptor-base);
   fill-opacity:1;
-  stroke:none;
-  font-family:Arial;
+}
+svg text.label tspan {
+  font-size:12px;
+}
+
+svg text.label.standalone {
+  stroke: var(--wfadaptor-background);
+  stroke-width: 3px;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  paint-order: stroke markers fill;
+  font-family: adawaita-sans;
+}
+svg text.label.rotate {
+  transform: translateY(10px) rotate(-30deg);
 }
 
 svg text.smaller {
@@ -403,7 +443,7 @@ svg text.smaller {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family:Arial;
+  font-family: adawaita-sans;
 }
 
 #arrow {
@@ -412,54 +452,19 @@ svg text.smaller {
   fill: var(--wfadaptor-base);
 }
 
-svg g.element[element-id].hover .hfill {
-  fill: var(--wfadaptor-selected);
-  fill-opacity:1;
+svg g.element[element-id].hover {
   cursor: pointer;
 }
-svg g.element[element-id].hover .hline {
-  fill: var(--wfadaptor-selected);
-  fill-opacity:1;
-  stroke: var(--wfadaptor-selected);
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
-  cursor: pointer;
+
+svg g.element[element-id].hover .hoverstyle {
+  stroke: var(--wfadaptor-hover);
+  stroke-width: 3;
 }
-svg g.element[element-id].hover .htext {
-  fill: var(--wfadaptor-selected);
-  fill-opacity:1;
-  stroke: var(--wfadaptor-selected);
-  stroke-width:0.2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
-  cursor: pointer;
+svg g.element[element-id].hover .hoverstylethin {
+  stroke: var(--wfadaptor-hover);
+  stroke-width: 2;
 }
 svg g.element[element-id].hover > text.label {
   color: var(--wfadaptor-selected);
   fill: var(--wfadaptor-selected);
-}
-svg g.element[element-id].hover .cfill {
-  fill: var(--wfadaptor-base);
-  fill-opacity:1;
-  stroke: var(--wfadaptor-base);
-  stroke-width:0.2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
-}
-svg g.element[element-id].hover .cline {
-  stroke: var(--wfadaptor-base);
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-miterlimit:4;
-  stroke-opacity:1;
-  stroke-dasharray:none;
 }

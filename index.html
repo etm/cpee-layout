@@ -29,6 +29,8 @@
 
     <!-- modelling ui -->
     <script type="text/javascript" src="wfadaptor.js"></script>
+    <script type="text/javascript" src="themes/base.js"></script>
+
     <link rel="stylesheet" href="wfadaptor.css" type="text/css"/>
 
     <!-- integration -->
@@ -38,7 +40,7 @@
           method: 'GET',
           url: 'model.xml',
           success: (data) => {
-            new WfAdaptor('themes/default/theme.js',function(graphrealization){
+            new WfAdaptor('themes/preset/theme.js',function(graphrealization){
               graphrealization.draw_labels = (max,labels,shift,striped) => {
                 console.log(JSON.stringify(labels,  null, "  "));
               };

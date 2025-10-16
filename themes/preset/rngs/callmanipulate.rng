@@ -3,17 +3,33 @@
     <data type="string" rngui:readonly="true"/>
   </attribute>
   <attribute name="endpoint" rngui:label="Endpoint">
-    <data type="string"/>
+    <data type="string">
+      <param name="pattern">^[a-z_][a-zA-Z0-9_]*$</param>
+    </data>
   </attribute>
   <element name="parameters" rngui:header="Properties">
     <element name="label" rngui:label="Label">
       <data type="string" rngui:label="Short description of the task"/>
+    </element>
+    <element name="color" rngui:label="Task Color">
+      <choice rngui:type='color'>
+        <value>#ffffff</value>
+        <value>#d4e1f1</value>
+        <value>#d8f0dd</value>
+        <value>#ffffcc</value>
+        <value>#f2d8b8</value>
+        <value>#eeb3ac</value>
+        <value>#e4c3e4</value>
+        <value>#ded0c5</value>
+        <value>#bcbbbd</value>
+      </choice>
     </element>
     <element name="method" rngui:label="Method">
       <choice>
         <value>:post</value>
         <value>:get</value>
         <value>:put</value>
+        <value>:patch</value>
         <value>:delete</value>
       </choice>
     </element>
@@ -26,7 +42,10 @@
       </zeroOrMore>
     </element>
   </element>
-  <element name="code" rngui:header="Output Handling">
+  <element name="code" rngui:header="Data Handling">
+    <element name="signal" rngui:label="Signal after data manipulation (finalize/update)">
+      <data type="boolean" rngui:label="A signal is sent every time the activity changes a data object"/>
+    </element>
     <element name="prepare" rngui:header="Prepare" rngui:label="Code" rngui:fold="closed_conditional">
       <text rngui:label="Script that is executed, before a service call"/>
     </element>
@@ -120,9 +139,9 @@
             </element>
             <element name="extractor_type" rngui:label="Extractor Type">
               <choice>
-                <value id='intrinsic'>Intrinsic</value>
-                <value id='extrinsic'>Extrinsic</value>
-                <value id='separate'>Separate</value>
+                <value rngui:label='Intrinsic'>intrinsic</value>
+                <value rngui:label='Extrinsic'>extrinsic</value>
+                <value rngui:label='Separate'>separate</value>
               </choice>
             </element>
             <element name="extractor_code" rngui:label="Extractor Code" rngui:hint='For intrinsic &amp; extrinsic data'>

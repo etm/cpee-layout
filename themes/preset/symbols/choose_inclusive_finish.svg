@@ -1,5 +1,4 @@
 <svg class="clickable" xmlns="http://www.w3.org/2000/svg">
   <rect transform="rotate(45,14,12)" x="7" y="3" width="21" height="21" class="colorstyle markstyle hoverstyle stand"/>
-  <text transform="translate(15.5,23)" class="normallarge">+</text>
+  <circle cx="15.5" cy="15.5" r="7" class="stand"/>
 </svg>
-
