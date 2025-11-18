@@ -149,6 +149,7 @@ function WFAdaptorManifestationBase(adaptor) {
     return icon;
   } //}}}
   function contextMenuHandling(svgid,e,child,sibling) { //{{{
+    if (typeof save == 'undefined') { return false; }
     if (save['state'] != "ready" && save['state'] != "stopped") { return false; }
 
     var xml_node = self.adaptor.description.get_node_by_svg_id(svgid);
@@ -272,6 +273,7 @@ function WFAdaptorManifestationBase(adaptor) {
   } //}}}
 
   function positionHandling(svgid) { //{{{
+    if (typeof save == 'undefined') { }
     var xml_node = self.adaptor.description.get_node_by_svg_id(svgid);
     var vtarget = self.adaptor.illustrator.get_node_by_svg_id(svgid);
     if (vtarget.length > 0) {
@@ -304,6 +306,7 @@ function WFAdaptorManifestationBase(adaptor) {
     return false;
   } // }}}
   this.events.click = function(svgid, e) { // {{{
+    if (typeof save == 'undefined') { return false; }
     if (self.adaptor.description.get_node_by_svg_id(svgid).length == 0) {
       return;
     }
@@ -340,7 +343,7 @@ function WFAdaptorManifestationBase(adaptor) {
       self.adaptor.illustrator.get_label_by_svg_id(svgid).addClass('selected');
       $('#graphgrid [element-id=' + svgid + ']').addClass('selected');
 
-      self.update_details(svgid);
+      if (typeof save !== 'undefined') { self.update_details(svgid); }
     }
     if (e) { e.stopImmediatePropagation(); }
   } // }}}
