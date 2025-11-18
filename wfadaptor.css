@@ -26,12 +26,6 @@
   --wfadaptor-label: #e4e4e4;
   --wfadaptor-mark: #d4d4d4;
 
-/*--wfadaptor-selected: #f57900;*/
-/*--wfadaptor-hover: #f57900;*/
-
-/*--wfadaptor-selected: #4ee7d1;*/
-/*--wfadaptor-hover: #4ee7d1;*/
-
   --wfadaptor-selected: #000000;
   --wfadaptor-selected-text: #f57900;
   --wfadaptor-hover: #000000;
@@ -286,10 +280,8 @@ svg .standtrans {
 
 svg text.super {
   font-size:11px;
-  font-style:normal;
-  font-variant:normal;
+  font-family: adawaita-sans;
   font-weight:bold;
-  font-stretch:normal;
   text-align:center;
   line-height:100%;
   writing-mode:horizontal-tb;
@@ -298,7 +290,6 @@ svg text.super {
   fill: var(--wfadaptor-base);
   fill-opacity:1;
   stroke:none;
-  font-family: adawaita-sans;
 }
 svg tspan.exec {
   fill: var(--wfadaptor-exec-active-text);
@@ -342,9 +333,7 @@ svg tspan.necessary {
 
 svg text.label {
   font-size:14px;
-  font-style:normal;
-  font-variant:normal;
-  font-stretch:normal;
+  font-family: adawaita-sans;
   text-align:center;
   line-height:125%;
   writing-mode:horizontal-tb;
@@ -355,6 +344,7 @@ svg text.label {
 }
 svg text.label tspan {
   font-size:12px;
+  font-family: adawaita-sans;
 }
 
 svg text.label.standalone {
