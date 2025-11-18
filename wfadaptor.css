@@ -40,11 +40,18 @@ svg {
   display:inline;
   margin:0;
   padding:0;
+  font-family: adawaita-sans;
 }
 
 svg .duration {
   stroke: var(--wfadaptor-label);
 }
+
+/*
+svg [style*='--custom-color'] {
+	fill: url(#custom-gradient);
+}
+*/
 
 svg rect.group {
   fill: var(--wfadaptor-highlight);
@@ -280,8 +287,10 @@ svg .standtrans {
 
 svg text.super {
   font-size:11px;
-  font-family: adawaita-sans;
+  font-style:normal;
+  font-variant:normal;
   font-weight:bold;
+  font-stretch:normal;
   text-align:center;
   line-height:100%;
   writing-mode:horizontal-tb;
@@ -300,7 +309,6 @@ svg tspan.exec {
   stroke-linecap:round;
   stroke-linejoin:round;
   paint-order: stroke markers fill;
-  font-family: adawaita-sans;
 }
 svg tspan.active {
   fill: var(--wfadaptor-exec-active-text);
@@ -311,7 +319,6 @@ svg tspan.active {
   stroke-linecap:round;
   stroke-linejoin:round;
   paint-order: stroke markers fill;
-  font-family: adawaita-sans;
 }
 svg tspan.vote {
   fill: var(--wfadaptor-exec-vote-text);
@@ -322,7 +329,6 @@ svg tspan.vote {
   stroke-linecap:round;
   stroke-linejoin:round;
   paint-order: stroke markers fill;
-  font-family: adawaita-sans;
 }
 svg tspan.colon {
   display: none;
@@ -333,7 +339,9 @@ svg tspan.necessary {
 
 svg text.label {
   font-size:14px;
-  font-family: adawaita-sans;
+  font-style:normal;
+  font-variant:normal;
+  font-stretch:normal;
   text-align:center;
   line-height:125%;
   writing-mode:horizontal-tb;
@@ -344,7 +352,6 @@ svg text.label {
 }
 svg text.label tspan {
   font-size:12px;
-  font-family: adawaita-sans;
 }
 
 svg text.label.standalone {
@@ -353,7 +360,6 @@ svg text.label.standalone {
   stroke-linecap:round;
   stroke-linejoin:round;
   paint-order: stroke markers fill;
-  font-family: adawaita-sans;
 }
 svg text.label.rotate {
   transform: translateY(10px) rotate(-30deg);

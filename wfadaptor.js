@@ -239,6 +239,11 @@ function WfIllustrator(wf_adaptor) { // View  {{{
       '  <clipPath id="endclip">' +
       '    <rect x="20" y="-1" width="' + self.endclipshift + '" height="35"/>' +
       '  </clipPath>' +
+      '  <linearGradient id="custom-gradient" x2="0.35" y2="1">' +
+      '    <stop offset="0%" stop-color="var(--wfadaptor-background)"/>' +
+      '    <stop offset="50%" stop-color="var(--custom-color)"/>' +
+      '    <stop offset="100%" stop-color="var(--custom-color)"/>' +
+      '  </linearGradient>' +
       '</defs>'));
     self.svg.defs = {};
     self.svg.defs['unknown'] = $X('<g xmlns="http://www.w3.org/2000/svg" class="unknown">' +
@@ -292,6 +297,7 @@ function WfIllustrator(wf_adaptor) { // View  {{{
     $('> :not(defs)', self.svg.container).each(function() {$(this).remove()});
     $('> defs > [belongs-to=element]', self.svg.container).each(function() {$(this).remove()});
     self.dim.symbols = [];
+    self.dim.connections = [];
   } // }}}
   var get_symbol = this.get_symbol = function() { // {{{
   } // }}}
