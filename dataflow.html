@@ -26,6 +26,7 @@
     <!-- libs, do not modify. When local than load local libs. -->
     <script type="text/javascript" src="https://cpee.org/js_libs/jquery.min.js"></script>
     <script type="text/javascript" src="https://cpee.org/js_libs/util.js"></script>
+    <script type="text/javascript" src="https://cpee.org/js_libs/parsequery.js"></script>
 
 
     <!-- modelling ui -->
@@ -50,11 +51,16 @@
 
     <!-- integration -->
     <script>
+      let model = 'model.xml';
       $(document).ready(() => {
+        let q = $.parseQuerySimple();
+        if (q.model) { model = q.model; }
+
         $.ajax({
           method: 'GET',
-          url: 'model.xml',
+          url: model,
           success: (data) => {
+            if (data.documentElement.nodeName != 'description') { data = $('description',data)[0]; }
             new WfAdaptor('themes/dataflow/theme.js',function(graphrealization){
               graphrealization.draw_labels = (max,labels,dimensions,striped) => { draw_extended_columns(graphrealization,max,labels,dimensions,striped) };
               graphrealization.set_svg_container($('#graphcanvas'));
