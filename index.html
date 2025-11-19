@@ -51,7 +51,7 @@
 
         $.ajax({
           method: 'GET',
-          url: 'model.xml',
+          url: model,
           success: (data) => {
             if (data.documentElement.nodeName != 'description') { data = $('description',data)[0]; }
             new WfAdaptor('themes/preset/theme.js',function(graphrealization){
