@@ -42,12 +42,13 @@
         font-family: adawaita-sans;
         src: url(AdwaitaSans-Regular.ttf);
       }
+      #graphcolumn {
+        padding-top: 5em;
+      }
     </style>
 
     <!-- integration -->
     <script>
-      var graph_highlight = null;
-
       $(document).ready(() => {
         $.ajax({
           method: 'GET',
@@ -55,27 +56,17 @@
           success: (data) => {
             new WfAdaptor('themes/dataflow/theme.js',function(graphrealization){
               graphrealization.draw_labels = (max,labels,dimensions,striped) => {
-                // highlight
-                if (graph_highlight) {
-                  graph_highlight_tasks.forEach((ele) => {
-                    let er = $('g[element-id=' + ele + ']').attr('element-row');
-                    styletext = 'svg rect[element-row="'+ er + '"], div.graphlast[element-row="'+ er + '"] {  fill: #' + graph_highlight_color + ' !important; background-color:  #' + graph_highlight_color + ' !important; } ';
-                    $('head').append('<style type="text/css">' + styletext + '</style>');
-                    scroll_into_view(ele);
-                  })
-                }
-
                 // labels
-                $('#graphcanvas').css('grid-row', '1/span ' + (max.row + 2));
+                graphrealization.illustrator.svg.container.css('grid-row', '1/span ' + (max.row + 2));
                 if (striped == true) {
-                  if (!$('#graphgrid').hasClass('striped')) {
-                    $('#graphgrid').addClass('striped');
+                  if (!graphrealization.illustrator.svg.label_container.hasClass('striped')) {
+                    graphrealization.illustrator.svg.label_container.addClass('striped');
                   }
                 } else {
-                  $('#graphgrid').removeClass('striped');
+                  graphrealization.illustrator.svg.label_container.removeClass('striped');
                 }
 
-                $('.labelsrow, #graphgrid .graphlast').remove();
+                $('.labelsrow, .graphlast').remove();
                 let tcolumns = [];
                 let tcolumntype = {};
                 let tcolumncount = {}
@@ -176,7 +167,7 @@
                   }
                 };
 
-                $('#graphgrid').css({
+                graphrealization.illustrator.svg.label_container.css({
                   'grid-template-rows': (dimensions.height_shift/2) + 'px repeat(' + max.row + ', 1fr) ' + (dimensions.height_shift/2) + 'px',
                   'grid-template-columns': 'max-content' + (tcolumns.length > 0 ? ' repeat(' + tcolumns.length.toString() + ',max-content)' : '') + ' auto'
                 });
@@ -191,8 +182,8 @@
                     svgcolumn.append(svgfront);
                     svgcolumn.css('grid-row', '1/span ' + (max.row + 2))
                     svgcolumn.css('grid-column', tcolumns.indexOf(tcolumns.first) + 2);
-                    svgcolumn.attr('height', $('#graphcanvas').attr('height'));
-                    $('#graphgrid').append(svgcolumn);
+                    svgcolumn.attr('height', graphrealization.illustrator.svg.container.attr('height'));
+                    graphrealization.illustrator.svg.label_container.append(svgcolumn);
 
                     for (var i = 0; i < max.row; i++) {
                       let node = svgfront.append($(tcolumnsvgs[h][i+1]));
@@ -223,7 +214,7 @@
                 var j = tcolumns.length;
                 for (var i = 0; i < max.row; i++) {
                   var ele = $('<div element-row="' + i + '" class="graphlast ' + (i % 2 == 0 ? 'odd' : 'even') + '" style="grid-column: ' + (j+2) + '; grid-row: ' + (i+2) + '; height: ' + dimensions.stripe_height + 'px">&#032;</div>');
-                  $('#graphgrid').append(ele);
+                  graphrealization.illustrator.svg.label_container.append(ele);
                 }
               };
               graphrealization.set_svg_container($('#graphcanvas'));
