@@ -59,13 +59,7 @@ function WfAdaptor(theme_base,doit) { // Controller {{{
     illustrator.set_label_container(container);
   } // }}}
 
-  // initialize
-  this.illustrator = illustrator = new WfIllustrator(this);
-  this.description = description = new WfDescription(this, this.illustrator);
-
-  this.update = function(doit){ doit(self); };
-
-  $.getScript(theme_base, function() { //{{{
+  function loadTheme(doit) { //{{{
     manifestation = new WFAdaptorManifestation(self);
     illustrator.compact = manifestation.compact == true ? true : false;
     illustrator.rotated_labels = manifestation.rotated_labels == true ? true : false;
@@ -191,8 +185,29 @@ function WfAdaptor(theme_base,doit) { // Controller {{{
     }
     $.when.apply($, deferreds).then(function(x) {
       doit(self);
+    })
+  } //}}}
+
+  // initialize
+  this.illustrator = illustrator = new WfIllustrator(this);
+  this.description = description = new WfDescription(this, this.illustrator);
+
+  this.update = function(doit){ doit(self); };
+
+  this.redraw = function(){
+    description.redraw();
+  }
+
+  $.getScript(self.theme_base).done(function() {
+    loadTheme(doit);
+  }).fail(function(){
+    // default theme
+    self.theme_base = 'themes/preset/theme.js';
+    self.theme_dir = self.theme_base.replace(/theme.js/,'');
+    $.getScript(self.theme_base,function() {
+      loadTheme(doit);
     });
-  }); //}}}
+  });
 } // }}}
 
 // WfIllustrator:
@@ -234,7 +249,7 @@ function WfIllustrator(wf_adaptor) { // View  {{{
       '    <path d="m 2 2 l 6 3 l -6 3 z"/>' +
       '  </marker>' +
       '  <clipPath id="startclip">' +
-      '    <rect x="-1" y="-1" width="29" height="32"/>' +
+      '    <rect x="-4" y="-4" width="35" height="38"/>' +
       '  </clipPath>' +
       '  <clipPath id="endclip">' +
       '    <rect x="20" y="-1" width="' + self.endclipshift + '" height="35"/>' +
@@ -722,6 +737,16 @@ function WfIllustrator(wf_adaptor) { // View  {{{
       );
     }
 
+    // hover
+    $(g[0].childNodes[0]).append(
+      $X(
+        '<g class="hoverstyle markstyle" xmlns="http://www.w3.org/2000/svg">' +
+          '<circle cx="2" cy="0" r="7"/>' +
+          '<path d="m -1 0 l 2 2 l 4 -4" class="standline"/>' +
+        '</g>'
+      )
+    );
+
     // Binding events for symbol
     bind_event(g,sname,true);
 
@@ -874,22 +899,22 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
   var context_eval = this.context_eval = function(what) { // {{{
     return eval(what);
   } // }}}
-  var get_free_id = this.get_free_id = function(other) { // {{{
+  var get_free_id = this.get_free_id = function(prefix,aname,other) { // {{{
     var existing = new Array();
     if (other) {
-      if ($(other).attr('id')) {
-        existing.push($(other).attr('id'));
+      if ($(other).attr(aname)) {
+        existing.push($(other).attr(aname));
       }
-      $(other).find("[id]").each(function(k,v){
-        existing.push($(v).attr('id'));
+      $(other).find("[" + aname + "]").each(function(k,v){
+        existing.push($(v).attr(aname));
       });
     }
-    $('*[id]', description).each(function(){existing.push($(this).attr('id'))});
+    $('*[' + aname + ']', description).each(function(){existing.push($(this).attr(aname))});
     var id = 1;
-    while ($.inArray('a' + id,existing) != -1) {
+    while ($.inArray(prefix + id,existing) != -1) {
       id += 1;
     }
-    return 'a' + id;
+    return prefix + id;
   } // }}}
   var refresh = this.refresh = function(doit) {
     id_counter = {};
@@ -901,6 +926,16 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     self.set_labels(graph);
     illustrator.set_duration(start);
     doit(self);
+  }
+  var redraw = this.redraw = function(){
+    id_counter = {};
+    labels = [];
+    let start = performance.now();
+    illustrator.clear();
+    var graph = parse(description.children('description').get(0), {'row':0,'col':0,final:false,wide:false});
+    illustrator.set_svg(graph);
+    self.set_labels(graph);
+    illustrator.set_duration(start);
   }
   var update = this.update = function(svgid) { // {{{
     id_counter = {};
