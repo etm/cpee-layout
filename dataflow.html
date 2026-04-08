@@ -63,7 +63,7 @@
           success: (data) => {
             if (data.documentElement.nodeName != 'description') { data = $('description',data)[0]; }
             new WfAdaptor('themes/dataflow/theme.js',function(graphrealization){
-              graphrealization.draw_labels = (max,labels,dimensions,striped) => { draw_extended_columns(graphrealization,max,labels,dimensions,striped) };
+              graphrealization.draw_labels = (max,labels,dimensions,striped) => { draw_extended_columns(graphrealization,max,labels,dimensions,striped,true) };
               graphrealization.set_svg_container($('#graphcanvas'));
               graphrealization.set_label_container($('#graphgrid'));
               graphrealization.set_description($(data), true);
@@ -84,6 +84,6 @@
         </g>
       </svg>
     </template>
-    <div id='graphgrid'><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:x="http://www.w3.org/1999/xlink" id='graphcanvas' width='1' height='1'></svg></div>
+    <div id='graphgrid'><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:x="http://www.w3.org/1999/xlink" id='graphcanvas' class='graphcolumn' width='1' height='1'></svg></div>
   </body>
 </html>

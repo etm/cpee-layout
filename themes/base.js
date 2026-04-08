@@ -350,19 +350,12 @@ function WFAdaptorManifestationBase(adaptor) {
   this.events.dblclick = function(svgid, e) { // {{{
   } // }}}
   this.events.mouseover = function(svgid, e) { // {{{
-    let er = self.adaptor.illustrator.svg.container.find('[element-id = "' + svgid + '"][element-row]').attr('element-row');
-    $('.resource-row[element-row=' + er + '] .resource-point').each((_,e) => {
-      let pos = e.getBoundingClientRect();
-      let text = $('text',e).text();
-      show_dataflow_label(pos.x + 12, pos.y + 5, 60, text);
-    })
     self.adaptor.illustrator.svg.container.find('.tile[element-id = "' + svgid + '"]').css('display','block');
     self.adaptor.illustrator.svg.container.find('[element-id = "' + svgid + '"]').addClass('hover');
     self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').addClass('hover');
     return false;
   } // }}}
   this.events.mouseout = function(svgid, e) { // {{{
-    $('.displaylabel').remove();
     self.adaptor.illustrator.svg.container.find('.tile[element-id = "' + svgid + '"]').css('display','none');
     self.adaptor.illustrator.svg.container.find('[element-id = "' + svgid + '"]').removeClass('hover');
     self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').removeClass('hover');
