@@ -39,13 +39,15 @@ function show_dataflow_row_label(data) {
 }
 
 function show_dataflow_row_labels() {
-  $('.displaylabel').remove();
-  $('.resource-column',manifestation.adaptor.illustrator.svg.label_container).each((_,ele)=>{
-    show_dataflow_row_label(ele);
-  });
+  if (manifestation.adaptor.properties['always'] == 'true') {
+    $('.displaylabel').remove();
+    $('.resource-column',manifestation.adaptor.illustrator.svg.label_container).each((_,ele)=>{
+      show_dataflow_row_label(ele);
+    });
+  }
 }
 
-function draw_extended_columns(graphrealization,max,labels,dimensions,striped,always=false) {
+function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
   // labels
   graphrealization.illustrator.svg.container.css('grid-row', '1/span ' + (max.row + 2));
   if (striped == true) {
