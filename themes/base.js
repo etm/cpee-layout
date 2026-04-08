@@ -292,6 +292,10 @@ function WFAdaptorManifestationBase(adaptor) {
     return false;
   } // }}}
   this.events.mousedown = function(svgid, e, child, sibling) { // {{{
+    if (typeof save === 'undefined') {
+      return;
+    }
+
     if(e.button == 0) {  // left-click
       save['details_target'].tsvgid = svgid;
     } else if(e.button == 1) { // middle-click
@@ -305,7 +309,7 @@ function WFAdaptorManifestationBase(adaptor) {
     return false;
   } // }}}
   this.events.click = function(svgid, e) { // {{{
-    if (self.adaptor.description.get_node_by_svg_id(svgid).length == 0) {
+    if (typeof save === 'undefined' || self.adaptor.description.get_node_by_svg_id(svgid).length == 0) {
       return;
     }
 

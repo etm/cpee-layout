@@ -209,6 +209,7 @@ $(document).ready(function() {
   $('#graphcolumn').scroll((data)=>{
     if (current_label != undefined) {
       $('.displaylabel').remove();
+      console.log(current_label);
       show_dataflow_row_label(current_label);
     }
   });
