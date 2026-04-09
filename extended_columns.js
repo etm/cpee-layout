@@ -126,14 +126,14 @@ function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
                 let inner;
 
                 if (p.AR == "Read") {
-                  inner = $X('<polygon xmlns="http://www.w3.org/2000/svg" resource-column="' + count + '" points="' + (p.x) + ',' + pos + ' ' + (p.x + iconsize) + ',' + (pos + iconsize/2) + ' ' + (p.x + iconsize) + ',' + (pos - iconsize/2) + '" class="resource-point read"></polygon>');
+                  inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point read" resource-column="' + count + '"><polygon points="' + (p.x) + ',' + pos + ' ' + (p.x + iconsize) + ',' + (pos + iconsize/2) + ' ' + (p.x + iconsize) + ',' + (pos - iconsize/2) + '"></polygon></g>');
                   if (pos == p.y0) { firstAssignFlag = true; }
                 } else if (p.AR == "Assign") {    // Define points for a triangle pointing to the left
-                  inner = $X('<polygon xmlns="http://www.w3.org/2000/svg" resource-column="' + count + '" points="' + (p.x + iconsize) + ',' + pos + ' ' + (p.x) + ',' + (pos + iconsize/2) + ' ' + (p.x) + ',' + (pos - iconsize/2) + '" class="resource-point write"></polygon>');
+                  inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point write" resource-column="' + count + '"><polygon points="' + (p.x + iconsize) + ',' + pos + ' ' + (p.x) + ',' + (pos + iconsize/2) + ' ' + (p.x) + ',' + (pos - iconsize/2) + '"></polygon></g>');
                 } else if (p.AR == "AssignRead") {
-                  inner = $X('<circle xmlns="http://www.w3.org/2000/svg" resource-column="' + count + '" cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '" class="resource-point both"></circle>');
+                  inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point both" resource-column="' + count + '"><circle cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '"></circle></g>');
                 } else if (p.AR == "ReadAssign") {
-                  inner = $X('<circle xmlns="http://www.w3.org/2000/svg" resource-column="' + count + '" cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '" class="resource-point both"></circle>');
+                  inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point both" resource-column="' + count + '"><circle cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '"></circle></g>');
                   if (pos == p.y0) { firstAssignFlag = true; }
                 }
 
@@ -142,7 +142,7 @@ function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
                   p.ymax = pos;
                 }
 
-                inner.append($X('<text xmlns="http://www.w3.org/2000/svg"></text>').text(k));
+                inner.children().first().append($X('<text xmlns="http://www.w3.org/2000/svg"></text>').text(k));
                 tsvg.append(inner);
               }
 
@@ -228,7 +228,7 @@ $(document).ready(function() {
     if (clicked_label != current_label) {
       let rc = $(current_label).attr('resource-column');
       $('.resource-point[resource-column=' + rc + ']').each((_,e)=>{
-        let svgid = $(e).parent().attr('element-id');
+        let svgid = $(e).parent('g').attr('element-id');
         manifestation.events.mouseout(svgid);
       });
 
@@ -255,16 +255,17 @@ $(document).ready(function() {
 
     let rc = $(data.target).attr('resource-column');
     $('.resource-point[resource-column=' + rc + ']').each((_,e)=>{
-      let svgid = $(e).parent().attr('element-id');
+      let svgid = $(e).parent('g').attr('element-id');
       manifestation.events.mouseover(svgid);
     });
   });
   $('#graphgrid').on('mouseover','svg .resource-point',(data)=>{
     $('.displaylabel').remove();
-    let rc = $(data.target).attr('resource-column');
+    let tar = $(data.currentTarget);
+    let rc = tar.attr('resource-column');
     let rct = $('.resource-column[resource-column=' + rc + ']')[0];
     show_dataflow_row_label(rct);
-    let svgid = $(data.target).parent().attr('element-id');
+    let svgid = tar.attr('element-id');
     manifestation.events.mouseover(svgid);
     current_label = rct;
   });

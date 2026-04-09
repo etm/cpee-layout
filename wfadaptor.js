@@ -1147,7 +1147,7 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     if(root.tagName == 'description' && illustrator.elements[root.tagName].closing_symbol) {
       pos.row++;
       max.row = pos.row;
-      draw_position(illustrator.elements['start'].closing_symbol,parent_pos,pos,prev,block,[],this,{svg: block.svg, pos: pos});
+      draw_position(illustrator.elements['start'].closing_symbol,parent_pos,pos,prev,block,[],root,{svg: block.svg, pos: pos});
     }
 
     return {'endnodes': endnodes, 'max':max, 'svg': block.svg};
@@ -1186,6 +1186,7 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     }
   } //}}}
   var draw_position = function(tname,parent_pos,pos,prev,block,endnodes,context,second) { // private {{{
+    console.log(tname,context);
     var sname = sym_name(tname,context);
     // console.log('----- pos ' + sname, parent_pos.row, block.max.row, parent_pos.col, block.max.col, block, illustrator.dim.debug());
 
