@@ -64,6 +64,7 @@
             if (data.documentElement.nodeName != 'description') { data = $('description',data)[0]; }
             new WfAdaptor('themes/dataflow/theme.js',function(graphrealization){
               graphrealization.properties['always'] = 'true';
+              graphrealization.properties['iolabels'] = 'true';
               graphrealization.draw_labels = (max,labels,dimensions,striped) => { draw_extended_columns(graphrealization,max,labels,dimensions,striped,true) };
               graphrealization.set_svg_container($('#graphcanvas'));
               graphrealization.set_label_container($('#graphgrid'));

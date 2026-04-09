@@ -127,13 +127,25 @@ function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
 
                 if (p.AR == "Read") {
                   inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point read" resource-column="' + count + '"><polygon points="' + (p.x) + ',' + pos + ' ' + (p.x + iconsize) + ',' + (pos + iconsize/2) + ' ' + (p.x + iconsize) + ',' + (pos - iconsize/2) + '"></polygon></g>');
+                  if (manifestation.adaptor.properties['iolabels'] == 'true') {
+                    inner.append($X('<text xmlns="http://www.w3.org/2000/svg" x="' + (p.x + 3) + '" y="' + (pos+12) + '">r</text>'));
+                  }
                   if (pos == p.y0) { firstAssignFlag = true; }
                 } else if (p.AR == "Assign") {    // Define points for a triangle pointing to the left
                   inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point write" resource-column="' + count + '"><polygon points="' + (p.x + iconsize) + ',' + pos + ' ' + (p.x) + ',' + (pos + iconsize/2) + ' ' + (p.x) + ',' + (pos - iconsize/2) + '"></polygon></g>');
+                  if (manifestation.adaptor.properties['iolabels'] == 'true') {
+                    inner.append($X('<text xmlns="http://www.w3.org/2000/svg" x="' + (p.x) + '" y="' + (pos+12) + '">w</text>'));
+                  }
                 } else if (p.AR == "AssignRead") {
                   inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point both" resource-column="' + count + '"><circle cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '"></circle></g>');
+                  if (manifestation.adaptor.properties['iolabels'] == 'true') {
+                    inner.append($X('<text xmlns="http://www.w3.org/2000/svg" x="' + (p.x-1.5) + '" y="' + (pos+12) + '">rw</text>'));
+                  }
                 } else if (p.AR == "ReadAssign") {
                   inner = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point both" resource-column="' + count + '"><circle cx="' + (p.x + iconsize/2) + '" cy="' + pos + '" r="' + (iconsize / 2) + '"></circle></g>');
+                  if (manifestation.adaptor.properties['iolabels'] == 'true') {
+                    inner.append($X('<text xmlns="http://www.w3.org/2000/svg" x="' + (p.x-1.5) + '" y="' + (pos+12) + '">rw</text>'));
+                  }
                   if (pos == p.y0) { firstAssignFlag = true; }
                 }
 
@@ -152,7 +164,12 @@ function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
                 if (tcolumnsvgs[col.column][1] == undefined) {
                   tcolumnsvgs[col.column][1] = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-row" element-row="' + 0 + '"></g>');
                 }
-                tcolumnsvgs[col.column][1].append($X('<polygon xmlns="http://www.w3.org/2000/svg" resource-column="' + count + '" points="' + (p.x + iconsize) + ',' + firstpos + ' ' + (p.x) + ',' + (firstpos + iconsize/2) + ' ' + (p.x) + ',' + (firstpos - iconsize/2) + '" class="resource-point write"></polygon>').append($X('<text xmlns="http://www.w3.org/2000/svg"></text>').text(k)));
+                let i = $X('<g xmlns="http://www.w3.org/2000/svg" class="resource-point write" resource-column="' + count + '"><polygon points="' + (p.x + iconsize) + ',' + firstpos + ' ' + (p.x) + ',' + (firstpos + iconsize/2) + ' ' + (p.x) + ',' + (firstpos - iconsize/2) + '"></polygon></g>');
+                if (manifestation.adaptor.properties['iolabels'] == 'true') {
+                  i.append($X('<text xmlns="http://www.w3.org/2000/svg" x="' + (p.x-1.5) + '" y="' + (firstpos+12) + '">w</text>'));
+                }
+                i.children().first().append($X('<text xmlns="http://www.w3.org/2000/svg"></text>').text(k));
+                tcolumnsvgs[col.column][1].append(i);
               }
               cx += iconsize + space;
               count += 1;
@@ -265,7 +282,7 @@ $(document).ready(function() {
     let rc = tar.attr('resource-column');
     let rct = $('.resource-column[resource-column=' + rc + ']')[0];
     show_dataflow_row_label(rct);
-    let svgid = tar.attr('element-id');
+    let svgid = tar.parent().attr('element-id');
     manifestation.events.mouseover(svgid);
     current_label = rct;
   });

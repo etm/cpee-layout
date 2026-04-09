@@ -101,7 +101,7 @@ data.costs += result.value('costs').to_f</finalize>
       <manipulate id="a3">data.persons -= 1</manipulate>
     </loop>
   </parallel>
-  <choose mode="inclusive">
+  <choose mode="exclusive">
     <alternative condition="data.costs &gt; 700">
       <call id="a4" endpoint="approve">
         <parameters>
@@ -111,6 +111,12 @@ data.costs += result.value('costs').to_f</finalize>
             <costs>!data.costs</costs>
           </arguments>
         </parameters>
+        <code>
+          <prepare/>
+          <finalize output="result">data.costs = data.costs</finalize>
+          <update output="result"/>
+          <rescue output="result"/>
+        </code>
         <annotations>
           <_timing>
             <_timing_weight/>

@@ -1186,7 +1186,6 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     }
   } //}}}
   var draw_position = function(tname,parent_pos,pos,prev,block,endnodes,context,second) { // private {{{
-    console.log(tname,context);
     var sname = sym_name(tname,context);
     // console.log('----- pos ' + sname, parent_pos.row, block.max.row, parent_pos.col, block.max.col, block, illustrator.dim.debug());
 
