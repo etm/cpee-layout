@@ -146,5 +146,6 @@ data.costs += result.value('costs').to_f</finalize>
         </documentation>
       </call>
     </alternative>
+    <otherwise/>
   </choose>
 </description>
