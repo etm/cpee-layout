@@ -1,0 +1,15 @@
+<g xmlns="http://www.w3.org/2000/svg">
+  <g class="part-normal">
+    <circle cx="15" cy="15" r="14" class="execstyle stand"/>
+    <circle cx="15" cy="15" r="11" class="colorstyle stand"/>
+    <path d="m 9,11 7,5 0,-6" class="stand" style="fill: none;"/>
+  </g>
+  <g class="part-start">
+    <circle cx="15" cy="15" r="14" class="execstyle stand"/>
+    <circle cx="15" cy="15" r="11" class="colorstyle stand"/>
+    <path d="m 9,11 7,5 0,-6" class="stand" style="fill: none;"/>
+  </g>
+  <g class="part-middle" transform="translate(38,0)">
+    <text transform="translate(0,20)" class="label"></text>
+  </g>
+</g>

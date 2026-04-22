@@ -24,6 +24,148 @@ var high;
 // WfAdaptor:
 // Handles interaction between Illustartor and Description
 // e.g. Event fires to Adaptor to insert Element and Illustrator and Description do it
+function WfIcon(theme_base,doit) { // Controller {{{
+
+  // public variables {{{
+    this.illustrator;
+    this.theme_base = theme_base;
+    this.theme_dir = theme_base.replace(/theme.js/,'');
+    this.elements = {};
+    this.properties = {};
+  // }}}
+
+  // private variables {{{
+    var illustrator;
+    var self = this;
+  // }}}
+
+  // helper funtions
+  this.set_svg_container = function (container) { // {{{
+    illustrator.set_svg_container(container); // TODO: shadowing the container element
+  } // }}}
+
+  function loadTheme(doit) { //{{{
+    manifestation = new WFAdaptorManifestation(self);
+    illustrator.compact = manifestation.compact == true ? true : false;
+    illustrator.rotated_labels = manifestation.rotated_labels == true ? true : false;
+    illustrator.striped = manifestation.striped == true ? true : false;
+    var deferreds = [];
+    // copy parent stuff
+    for(element in manifestation.elements) {
+      if (manifestation.elements[element].parent) {
+        if (!manifestation.elements[element].adaptor) {
+          manifestation.elements[element].adaptor = manifestation.elements[manifestation.elements[element].parent].adaptor;
+        }
+        var ill = manifestation.elements[manifestation.elements[element].parent].illustrator;
+        for (var key in ill) {
+          if (manifestation.elements[element].illustrator[key] == undefined) {
+            manifestation.elements[element].illustrator[key] = ill[key];
+          }
+        }
+        if (manifestation.elements[element].type == undefined) {
+          manifestation.elements[element].type = manifestation.elements[manifestation.elements[element].parent].type;
+        }
+      }
+    }
+    // doit
+    for(element in manifestation.resources) {
+      deferreds.push(
+        $.ajax({
+          type: "GET",
+          dataType: "xml",
+          url: manifestation.resources[element],
+          context: element,
+          success: function(res){
+            manifestation.resources[this] = $(res.documentElement);
+          }
+        })
+      );
+    }
+    for(element in manifestation.elements) {
+      if (manifestation.elements[element].illustrator) {
+        if (manifestation.elements[element].illustrator.svg && (typeof manifestation.elements[element].illustrator.svg === 'string' || manifestation.elements[element].illustrator.svg instanceof String)) {
+          deferreds.push(
+            $.ajax({
+              type: "GET",
+              dataType: "xml",
+              url: manifestation.elements[element].illustrator.svg,
+              context: element,
+              success: function(res){
+                manifestation.elements[this].illustrator.svg = $(res.documentElement);
+              }
+            })
+          );
+        } else if (manifestation.elements[element].illustrator.svg && (typeof manifestation.elements[element].illustrator.svg === 'object' || manifestation.elements[element].illustrator.svg instanceof Object)) {
+          if (manifestation.elements[element].illustrator.svg.start) {
+            deferreds.push(
+              $.ajax({
+                type: "GET",
+                dataType: "xml",
+                url: manifestation.elements[element].illustrator.svg.start,
+                context: element,
+                success: function(res){
+                  manifestation.elements[this].illustrator.svg.start = $(res.documentElement);
+                }
+              })
+            );
+          }
+          if (manifestation.elements[element].illustrator.svg.middle) {
+            deferreds.push(
+              $.ajax({
+                type: "GET",
+                dataType: "xml",
+                url: manifestation.elements[element].illustrator.svg.middle,
+                context: element,
+                success: function(res){
+                  manifestation.elements[this].illustrator.svg.middle = $(res.documentElement);
+                }
+              })
+            );
+          }
+          if (manifestation.elements[element].illustrator.svg.end) {
+            deferreds.push(
+              $.ajax({
+                type: "GET",
+                dataType: "xml",
+                url: manifestation.elements[element].illustrator.svg.end,
+                context: element,
+                success: function(res){
+                  manifestation.elements[this].illustrator.svg.end = $(res.documentElement);
+                }
+              })
+            );
+          }
+        }
+        illustrator.elements[element] = manifestation.elements[element].illustrator;
+        illustrator.elements[element].type = manifestation.elements[element].type || 'abstract';
+      }
+      if (manifestation.elements[element].adaptor) {
+        self.elements[element] = manifestation.elements[element].adaptor;
+      }
+    }
+    $.when.apply($, deferreds).then(function(x) {
+      doit(self);
+    })
+  } //}}}
+
+  this.draw = function (svg) {
+    console.log('rrrra');
+  }
+
+  // initialize
+  this.illustrator = illustrator = new WfIllustrator(this);
+
+  $.getScript(self.theme_base).done(function() {
+    loadTheme(doit);
+  }).fail(function(){
+    // default theme
+    self.theme_base = 'themes/preset/theme.js';
+    self.theme_dir = self.theme_base.replace(/theme.js/,'');
+    $.getScript(self.theme_base,function() {
+      loadTheme(doit);
+    });
+  });
+} // }}}
 function WfAdaptor(theme_base,doit) { // Controller {{{
 
   // public variables {{{
