@@ -149,7 +149,10 @@ function WfIcon(theme_base,doit) { // Controller {{{
   } //}}}
 
   this.draw = function (svg) {
-    console.log('rrrra');
+    let pos = {'row': 1,'col': 1};
+    let block = { 'max': {'row': pos.row, 'col': pos.col}, 'endnodes': [], 'svg': $X('<g class="group" xmlns="http://www.w3.org/2000/svg"/>') };
+    illustrator.draw.draw_symbol('call', 'description', 'symbol', pos.row, pos.row, pos.row, pos.col, block.svg, false, {}, {})
+    self.illustrator.set_svg(block);
   }
 
   // initialize
