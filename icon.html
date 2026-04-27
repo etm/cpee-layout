@@ -53,9 +53,9 @@
           method: 'GET',
           url: icon,
           success: (data) => {
-            new WfIcon('themes/preset/theme.js',function(graphrealization){
+            new WfAdaptor('themes/preset/theme.js',function(graphrealization){
               graphrealization.set_svg_container($('#iconcanvas'));
-              graphrealization.draw(data);
+              graphrealization.draw_element('callmanipulate','a1','Hallo mein Lieber Task');
             });
           },
         });
