@@ -373,17 +373,13 @@ function WFAdaptorManifestationBase(adaptor) {
   this.events.mouseover = function(svgid, e) { // {{{
     self.adaptor.illustrator.svg.container.find('.tile[element-id = "' + svgid + '"]').css('display','block');
     self.adaptor.illustrator.svg.container.find('[element-id = "' + svgid + '"]').addClass('hover');
-    if (self.adaptor.illustrator.svg.label_container) {
-      self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').addClass('hover');
-    }
+    self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').addClass('hover');
     return false;
   } // }}}
   this.events.mouseout = function(svgid, e) { // {{{
     self.adaptor.illustrator.svg.container.find('.tile[element-id = "' + svgid + '"]').css('display','none');
     self.adaptor.illustrator.svg.container.find('[element-id = "' + svgid + '"]').removeClass('hover');
-    if (self.adaptor.illustrator.svg.label_container) {
-      self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').removeClass('hover');
-    }
+    self.adaptor.illustrator.svg.label_container.find('[element-id = "' + svgid + '"]').removeClass('hover');
     return false;
   } // }}}
   this.events.dragstart = function (svgid, e) { //{{{
