@@ -101,7 +101,7 @@ function draw_extended_columns(graphrealization,max,labels,dimensions,striped) {
           let firstpos = dimensions.height_shift/2 + (dimensions.height / 2);
 
           if (col.type == "resource") {
-            for (const [k, v] of Object.entries(col.value)) {
+            for (const [k, v] of Object.entries(col.value).sort((a, b) => b[1].localeCompare(a[1]))) {
               var p = { AR: v };
               if (!mapPoints.has(k)) {
                 p.y0 = p.y0 == undefined ? pos : p.y0;
