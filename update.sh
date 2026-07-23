@@ -9,3 +9,4 @@ cp -r ../cpee/cockpit/themes/preset themes/.
 cp -r ../cpee/cockpit/themes/presetaltid themes/.
 cp -r ../cpee/cockpit/themes/packed themes/.
 cp -r ../cpee/cockpit/themes/dataflow themes/.
+cp -r ../cpee/cockpit/themes/THEMES.MD .
