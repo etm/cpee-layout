@@ -4,3 +4,8 @@ cp extended_columns.js ../cpee/cockpit/js/extended_columns.js
 cp extended_columns-label.css ../cpee/cockpit/css/extended_columns-label.css
 cp extended_columns-svg.css ../cpee/cockpit/css/extended_columns-svg.css
 cp themes/base.js ../cpee/cockpit/themes/base.js
+cp themes/base.js ../cpee/cockpit/themes/base.js
+rm -rf ../cpee/cockpit/themes/packed
+cp -av themes/packed ../cpee/cockpit/themes/
+rm -rf ../cpee/cockpit/themes/presetlr
+cp -av themes/presetlr ../cpee/cockpit/themes/
