@@ -2,15 +2,15 @@
   This file is part of CPEE.
 
   CPEE is free software: you can redistribute it and/or modify it under the terms
-  of the GNU General Public License as published by the Free Software Foundation,
+  of the GNU Lesser General Public License as published by the Free Software Foundation,
   either version 3 of the License, or (at your option) any later version.
 
   CPEE is distributed in the hope that it will be useful, but WITHOUT ANY
   WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
 
-  You should have received a copy of the GNU General Public License along with
-  CPEE (file COPYING in the main directory).  If not, see
+  You should have received a copy of the GNU Lesser General Public License along with
+  CPEE (file LICENSE in the main directory).  If not, see
   <http://www.gnu.org/licenses/>.
 */
 
@@ -985,6 +985,7 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
   // }}}
   // Adaption functions {{{
   this.insert_after = function(new_node, target, source_opts) { // {{{
+    reset_used_id_list();
     if ($.isArray(new_node)) {
       $.each(new_node,function(k,v){
         var nn = self.source(v,source_opts);
@@ -999,6 +1000,7 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     update();
   } // }}}
   this.insert_first_into = function(new_node, target, source_opts) { // {{{
+    reset_used_id_list();
     if ($.isArray(new_node)) {
       $.each(new_node,function(k,v){
         var nn = self.source(v,source_opts);
@@ -1013,6 +1015,7 @@ function WfDescription(wf_adaptor, wf_illustrator) { // Model {{{
     update();
   } // }}}
   this.insert_last_into = function(new_node, target) { // {{{
+    reset_used_id_list();
     if ($.isArray(new_node)) {
       $.each(new_node,function(k,v){
         var nn = self.source(v);
