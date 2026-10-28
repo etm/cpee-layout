@@ -20,13 +20,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
     <meta charset="utf-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>CPEE Layout Test</title>
 
     <!-- libs, do not modify. When local than load local libs. -->
     <script type="text/javascript" src="https://cpee.org/js_libs/jquery.min.js"></script>
     <script type="text/javascript" src="https://cpee.org/js_libs/uidash_util.js"></script>
-    <script type="text/javascript" src="https://cpee.org/js_libs/parsequery.js"></script>
 
 
     <!-- modelling ui -->
@@ -46,8 +44,8 @@
     <script>
       let icon = 'icon.svg';
       $(document).ready(() => {
-        let q = $.parseQuerySimple();
-        if (q.icon) {icon = q.icon; }
+        let q = new URLSearchParams(window.location.search);
+        if (q.get('icon')) { icon = q.get('icon'); }
 
         $.ajax({
           method: 'GET',
