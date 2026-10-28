@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+/*
+  This file is part of cpee-layout.
+
+  cpee-layout is free software: you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free Software
+  Foundation, either version 3 of the License, or (at your option) any later
+  version.
+
+  cpee-layout is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+  details.
+
+  You should have received a copy of the GNU General Public License along with
+  cpee-layout (file LICENSE in the main directory). If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
+// Prints the layout of a CPEE model or testset as JSON (get_svg_metrics in
+// wfadaptor.js): pos_matrix holds the symbols per row and column, con_list the
+// connections between them.
+
+'use strict';
+
+const { parse_args, render, write, run } = require('../lib/render.js');
+
+run('svgmetrics', async () => {
+  const opts = parse_args(process.argv.slice(2),
+    'Usage: svgmetrics [-lr] [-o FILE] MODEL|TESTSET\n' +
+    '\n' +
+    '  MODEL|TESTSET   CPEE model (<description>) or testset (its <description> is used)\n' +
+    '  -lr             use the presetlr theme (left to right) instead of preset\n' +
+    '  -o FILE         write the JSON to FILE instead of stdout\n'
+  );
+  const { window, graphrealization } = await render(opts.input, opts.theme);
+
+  write(opts, JSON.stringify(graphrealization.get_svg_metrics(), null, 2) + '\n');
+  window.close();
+});

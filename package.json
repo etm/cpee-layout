@@ -4,7 +4,8 @@
   "description": "Layout and rendering of CPEE process models",
   "license": "GPL-3.0-or-later",
   "bin": {
-    "svgexport": "bin/svgexport"
+    "svgexport": "bin/svgexport",
+    "svgmetrics": "bin/svgmetrics"
   },
   "dependencies": {
     "fontkit": "^2.0.4",
