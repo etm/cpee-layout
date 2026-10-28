@@ -1,0 +1,16 @@
+{
+  "name": "cpee-layout",
+  "private": true,
+  "description": "Layout and rendering of CPEE process models",
+  "license": "GPL-3.0-or-later",
+  "bin": {
+    "svgexport": "bin/svgexport"
+  },
+  "dependencies": {
+    "fontkit": "^2.0.4",
+    "jquery": "^3.3.1",
+    "jsdom": "^30.1.3",
+    "svg-path-bbox": "^2.1.0",
+    "uidashjs": "^1.0.0"
+  }
+}

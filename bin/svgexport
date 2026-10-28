@@ -1,0 +1,202 @@
+#!/usr/bin/env node
+/*
+  This file is part of cpee-layout.
+
+  cpee-layout is free software: you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free Software
+  Foundation, either version 3 of the License, or (at your option) any later
+  version.
+
+  cpee-layout is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+  details.
+
+  You should have received a copy of the GNU General Public License along with
+  cpee-layout (file LICENSE in the main directory). If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
+// Renders a CPEE model or testset to a standalone SVG, the same way index.html
+// does in the browser: wfadaptor.js runs inside jsdom, and lib/svgpolyfill.js
+// provides the measurements that jsdom lacks.
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
+const svgpolyfill = require('../lib/svgpolyfill.js');
+
+const ROOT = path.resolve(__dirname, '..');
+const SVGNS = 'http://www.w3.org/2000/svg';
+const CPEENS = 'http://cpee.org/ns/description/1.0';
+
+function usage(code) { //{{{
+  (code == 0 ? process.stdout : process.stderr).write(
+    'Usage: svgexport [-lr] [-o FILE] [--embed-font] MODEL|TESTSET\n' +
+    '\n' +
+    '  MODEL|TESTSET   CPEE model (<description>) or testset (its <description> is used)\n' +
+    '  -lr             use the presetlr theme (left to right) instead of preset\n' +
+    '  -o FILE         write the SVG to FILE instead of stdout\n' +
+    '  --embed-font    embed AdwaitaSans-Regular.ttf, otherwise the font has to be installed\n'
+  );
+  process.exit(code);
+} //}}}
+
+function parse_args(argv) { //{{{
+  const opts = { theme: 'themes/preset/theme.js', output: null, embed_font: false, input: null };
+  for (let i = 0; i < argv.length; i++) {
+    switch (argv[i]) {
+      case '-lr': opts.theme = 'themes/presetlr/theme.js'; break;
+      case '-o': opts.output = argv[++i]; break;
+      case '--embed-font': opts.embed_font = true; break;
+      case '-h':
+      case '--help': usage(0);
+      default:
+        if (argv[i].startsWith('-') || opts.input) { usage(1); }
+        opts.input = argv[i];
+    }
+  }
+  if (!opts.input || (argv.includes('-o') && !opts.output)) { usage(1); }
+  return opts;
+} //}}}
+
+// Like save_svgfile in cpee/cockpit/js/instance.js: the css is inlined into the
+// style attributes with var() resolved, so the svg needs no stylesheet. Unlike
+// there, the rules are applied in cascade order (specificity, then position).
+function inline_styles(window,svg) { //{{{
+  const vars = {};
+  const rules = [];
+  let family = '';
+  let order = 0;
+  for (const sheet of window.document.styleSheets) {
+    for (const rule of sheet.cssRules) {
+      if (!rule.selectorText) { continue; }
+      if (rule.selectorText == ':root') {
+        for (let i = 0; i < rule.style.length; i++) { vars[rule.style[i]] = rule.style.getPropertyValue(rule.style[i]).trim(); }
+      } else if (rule.selectorText == 'svg') {
+        family = rule.style.getPropertyValue('font-family').trim();
+      } else {
+        rule.selectorText.split(',').forEach(sel => rules.push({ sel: sel.trim(), spec: svgpolyfill.specificity(sel), order: order, css: rule.style.cssText }));
+      }
+      order++;
+    }
+  }
+  rules.sort((a,b) => a.spec - b.spec || a.order - b.order);
+  const resolve = (css) => css.replace(/var\((--[\w-]+)\)/g, (m,v) => v in vars ? vars[v] : m);
+  family = family.replace(/-/,' ').split(' ').map(w => w[0].toUpperCase() + w.substr(1)).join(' '); // adwaita-sans -> Adwaita Sans, the installed name
+
+  svg.querySelectorAll('*').forEach(el => {
+    const decl = rules.filter(r => { try { return el.matches(r.sel); } catch (e) { return false; } }).map(r => resolve(r.css));
+    const own = el.getAttribute('style');
+    if (own && own.trim() != '') { decl.push(own.trim().replace(/;?$/,';')); }
+    if (el.matches('text.super, g.hoverstyle, g.markstyle')) { decl.push('display: none;'); }
+    if (el.nodeName == 'text' && family != '') { decl.push("font-family: '" + family + "';"); }
+    if (decl.length > 0) { el.setAttribute('style', decl.join(' ')); }
+  });
+  return family;
+} //}}}
+
+async function main() { //{{{
+  const opts = parse_args(process.argv.slice(2));
+  const input = fs.readFileSync(opts.input, 'utf8');
+  const css = fs.readFileSync(path.join(ROOT, 'wfadaptor.css'), 'utf8');
+  const font = path.join(ROOT, 'AdwaitaSans-Regular.ttf');
+
+  const dom = new JSDOM(
+    '<!DOCTYPE html><html><head></head><body>' +
+    '<div id="graphgrid"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:x="http://www.w3.org/1999/xlink" id="graphcanvas" width="1" height="1"></svg></div>' +
+    '</body></html>',
+    { runScripts: 'outside-only' }
+  );
+  const window = dom.window;
+  svgpolyfill.install(window, css, font);
+
+  // the same libs index.html loads from js_libs, as browser scripts in the window
+  window.eval(fs.readFileSync(require.resolve('jquery/dist/jquery.min.js'), 'utf8'));
+  window.eval(fs.readFileSync(require.resolve('uidashjs/uidash_util.js'), 'utf8'));
+  const $ = window.jQuery;
+
+  // themes and symbols come from the file system instead of http
+  const run = (url) => window.eval(fs.readFileSync(path.resolve(ROOT, url), 'utf8') + '\n//# sourceURL=' + url);
+  let fail = (e) => { throw e; }; // $.when never calls back on errors, so loading errors end the export directly
+  $.ajax = function(o) { // asynchronous like the real one, loadTheme relies on it (shared illustrator objects)
+    const d = $.Deferred();
+    setImmediate(() => {
+      try {
+        const doc = $.parseXML(fs.readFileSync(path.resolve(ROOT, o.url), 'utf8'));
+        if (o.success) { o.success.call(o.context, doc); }
+        d.resolveWith(o.context, [doc]);
+      } catch (e) {
+        fail(new Error('could not load ' + o.url + ': ' + e.message));
+      }
+    });
+    return d.promise();
+  };
+  $.getScript = function(url,success) {
+    const d = $.Deferred();
+    try {
+      run(url);
+      if (success) { success(); }
+      d.resolve();
+    } catch (e) {
+      d.reject(e);
+    }
+    return d.promise();
+  };
+  run('themes/base.js');
+  run('wfadaptor.js');
+
+  let data = $.parseXML(input);
+  if (data.documentElement.nodeName != 'description') { // testset: the model is the description inside, either wrapped in a <description> or not
+    const model = data.getElementsByTagNameNS(CPEENS, 'description')[0];
+    if (!model) { throw new Error(opts.input + ' contains no ' + CPEENS + ' description'); }
+    data = $.parseXML(new window.XMLSerializer().serializeToString(model));
+  }
+
+  await new Promise((resolve,reject) => {
+    fail = reject;
+    new window.WfAdaptor(opts.theme, function(graphrealization) {
+      try {
+        graphrealization.set_svg_container($('#graphcanvas'));
+        graphrealization.set_label_container($('#graphgrid'));
+        graphrealization.set_description($(data), true);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+
+  const svg = window.document.getElementById('graphcanvas');
+  let width = parseInt(svg.getAttribute('width'));
+  $('#graphgrid > svg:not(#graphcanvas)').each((i,ele) => { // further columns, if the theme has them
+    const gr = window.document.createElementNS(SVGNS, 'g');
+    gr.setAttribute('transform', 'translate(' + width + ')');
+    width += parseInt(ele.getAttribute('width'));
+    $('g',ele).each((j,g) => { gr.appendChild(g.cloneNode(true)); });
+    svg.appendChild(gr);
+  });
+  svg.setAttribute('width', width + 1);
+  svg.querySelectorAll('.duration').forEach(e => e.remove()); // render time, differs on every run
+  const family = inline_styles(window, svg);
+  if (opts.embed_font) {
+    const style = window.document.createElementNS(SVGNS, 'style');
+    style.textContent = "@font-face { font-family: '" + family + "'; src: url(data:font/ttf;base64," + fs.readFileSync(font).toString('base64') + '); }';
+    svg.insertBefore(style, svg.firstChild);
+  }
+
+  const out = '<?xml version="1.0" encoding="UTF-8"?>\n' + $(svg).serializePrettyXML() + '\n';
+  if (opts.output) {
+    fs.writeFileSync(opts.output, out);
+  } else {
+    process.stdout.write(out);
+  }
+  window.close();
+} //}}}
+
+main().catch((e) => {
+  process.stderr.write('svgexport: ' + (e && e.stack ? e.stack : e) + '\n');
+  process.exit(1);
+});
