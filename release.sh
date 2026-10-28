@@ -9,3 +9,5 @@ rm -rf ../cpee/cockpit/themes/packed
 cp -av themes/packed ../cpee/cockpit/themes/
 rm -rf ../cpee/cockpit/themes/presetlr
 cp -av themes/presetlr ../cpee/cockpit/themes/
+rm -rf ../cpee/cockpit/themes/wellformed
+cp -av themes/wellformed ../cpee/cockpit/themes/
