@@ -173,6 +173,8 @@ noted; unset booleans behave as `false`/absent.
 | `info` | `function(node) → {attrName: value, ...}` | Extra HTML attributes stamped onto the drawn element (e.g. `element-endpoint`, `element-alt_id`), consumed later for lookups/menu icon rendering. |
 | `final` | `true` | Marks this element as a true dead-end (used by `terminate`) — downstream connection logic skips drawing anything past a `final` endpoint. |
 | `rotatelabels` | `true \| false` | Per-element opt-out/opt-in for the manifestation-level `rotated_labels` flag. |
+| `mark_position` | `'left' \| 'right'` | Corner of the icon where the engine puts the hover/mark marker (the circle with the checkmark), top left by default. Use `'right'` when the icon's label is on its left, e.g. presetlr's `loop_finish`. |
+| `hidelabel` | `true \| false` | The label is drawn invisible (`.label.invisible`), but still takes its space, e.g. presetlr's `loop_tail` uses the condition only to make the outgoing arrow as long as the label. |
 | `noindent` | `true` | Per-element opt-out of the default indent-first-column behavior in horizontal expansions. |
 
 `border: 'structural'` is the mechanism built for subprocesses. When an element's `border` is
@@ -348,6 +350,7 @@ one-off tweaks, e.g. `style="fill:none;"`).
 | `.label` (on `<text>`) | The node label text style. Put this on the `<text>` inside `part-middle`; leave its content empty, it's filled in at render time. |
 | `.label.standalone` | Adds a background-colored outline stroke behind the label text (for readability over busy backgrounds) — used e.g. on `loop.svg`'s inline label. |
 | `.label.rotate` | Applied automatically when the manifestation's `rotated_labels`/an element's `rotatelabels` is active. |
+| `.label.invisible` | Applied automatically when an element's `hidelabel` is set; `visibility: hidden`, so the label keeps its space. |
 | `.duration` | Stroke color for duration-annotation strokes. |
 | `.super` / `tspan.exec` / `.active` / `.vote` / `.colon` / `.necessary` | The small execution-count indicator (`▶ 0,0`) appended automatically above every icon unless `addition` is suppressed at draw time. |
 | `.stripe.even` / `.stripe.odd` | Alternating row backgrounds, only drawn when the manifestation sets `this.striped = true`. |
