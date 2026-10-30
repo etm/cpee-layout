@@ -1,11 +1,40 @@
 {
   "name": "cpee-layout",
-  "private": true,
-  "description": "Layout and rendering of CPEE process models",
-  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "description": "Themable, flexible BPMN auto-layout library used by the Cloud Process Execution Engine (cpee.org). Visualization and editing.",
+  "keywords": ["bpmn", "layout", "svg", "process", "workflow", "cpee"],
+  "homepage": "https://github.com/etm/cpee-layout",
+  "bugs": "https://github.com/etm/cpee-layout/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etm/cpee-layout.git"
+  },
+  "license": "LGPL-3.0-or-later",
+  "author": "Juergen \"eTM\" Mangler <juergen.mangler@gmail.com>",
+  "contributors": [
+    "Ralph Vigne"
+  ],
+  "style": "wfadaptor.css",
+  "files": [
+    "wfadaptor.js",
+    "wfadaptor.css",
+    "extended_columns.js",
+    "extended_columns-label.css",
+    "extended_columns-svg.css",
+    "themes/",
+    "bin/",
+    "lib/",
+    "THEMES.MD",
+    "AdwaitaSans-Regular.ttf",
+    "AdwaitaSans-Regular.ttf.License",
+    "AUTHORS"
+  ],
   "bin": {
     "svgexport": "bin/svgexport",
     "svgmetrics": "bin/svgmetrics"
+  },
+  "engines": {
+    "node": ">=22.22"
   },
   "dependencies": {
     "fontkit": "^2.0.4",

@@ -5,15 +5,29 @@ Event-driven. Minimal dependencies (jQuery).
 
 See [THEMES.MD](THEMES.MD) for the guide on building your own theme.
 
+## Installation
+
+```sh
+npm install cpee-layout
+```
+
+The browser library is wfadaptor.js with wfadaptor.css and the themes in
+themes/. It needs jquery and uidash_util.js from uidashjs (both installed as
+dependencies), so load jquery, then uidash_util.js, then wfadaptor.js.
+
 ## Command line tools
 
 Two tools render a model without a browser: wfadaptor.js runs inside jsdom,
 with text measured from AdwaitaSans-Regular.ttf. They need Node.js 22.22 or
-newer. Install the dependencies first:
+newer. In a checkout, install the dependencies first:
 
 ```sh
 npm install
 ```
+
+From the npm package they are available as `npx svgexport` and `npx
+svgmetrics`, or directly as `svgexport` and `svgmetrics` after `npm install -g
+cpee-layout`.
 
 Both take a CPEE model (root `<description>`) or a testset, which contains the
 model as a `<description>` in the `http://cpee.org/ns/description/1.0` namespace.
