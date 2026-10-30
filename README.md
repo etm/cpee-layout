@@ -63,9 +63,12 @@ wfadaptor.js): `pos_matrix[row][col]` holds the placed symbols (`x`, `width`,
 `type`, `label`, `eid`, empty cells are `null`), `con_list` the connections
 between them as `{"from":{"row":…,"col":…},"to":{"row":…,"col":…}}`. Rows and
 columns are 0-indexed. The metrics describe the drawing as it is shown: `x`
-and `width` are horizontal, a symbol is drawn 15.6 left of its `x`, and rows
-are 40 apart. With `-lr` the layout is mirrored at the diagonal, so the metrics
-are too: rows follow the branches and columns the flow.
+and `width` are horizontal, a symbol is drawn `geometry.shift` left of its `x`,
+and the symbols of row `r` start at `geometry.top + r * geometry.row`. Symbols
+with a shown label have its `label_box` (`x`, `y`, `width`, `height` in svg
+coordinates); hidden labels (`hidelabel`) are not in the metrics at all. `lr`
+tells the orientation: with `-lr` the layout is mirrored at the diagonal, so the
+metrics are too: rows follow the branches and columns the flow.
 
 ```sh
 bin/svgmetrics model.xml > model.json
