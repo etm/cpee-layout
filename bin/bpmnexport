@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+/*
+  This file is part of cpee-layout.
+
+  cpee-layout is free software: you can redistribute it and/or modify it under
+  the terms of the GNU Lesser General Public License as published by the Free
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version.
+
+  cpee-layout is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+  details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with cpee-layout (file LICENSE in the main directory). If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
+// Exports a CPEE model or testset as BPMN XML, laid out as drawn: the layout
+// (get_svg_metrics in wfadaptor.js) is converted by build-bpmn2.js.
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { parse_args, render, write, run } = require('../lib/render.js');
+
+run('bpmnexport', async () => {
+  const opts = parse_args(process.argv.slice(2),
+    'Usage: bpmnexport [-lr] [-o FILE] MODEL|TESTSET\n' +
+    '\n' +
+    '  MODEL|TESTSET   CPEE model (<description>) or testset (its <description> is used)\n' +
+    '  -lr             use the presetlr theme (left to right) instead of preset\n' +
+    '  -o FILE         write the BPMN to FILE instead of stdout\n'
+  );
+  const { window, graphrealization } = await render(opts.input, opts.theme);
+
+  // a browser script like wfadaptor.js, so it runs in the window as well
+  window.eval(fs.readFileSync(path.join(__dirname, '..', 'build-bpmn2.js'), 'utf8'));
+  const m = graphrealization.get_svg_metrics();
+  write(opts, window.bpmn2_convert(m.pos_matrix, m.con_list, m.lr, m.geometry) + '\n');
+  window.close();
+});

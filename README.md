@@ -17,7 +17,7 @@ dependencies), so load jquery, then uidash_util.js, then wfadaptor.js.
 
 ## Command line tools
 
-Two tools render a model without a browser: wfadaptor.js runs inside jsdom,
+Three tools render a model without a browser: wfadaptor.js runs inside jsdom,
 with text measured from AdwaitaSans-Regular.ttf. They need Node.js 22.22 or
 newer. In a checkout, install the dependencies first:
 
@@ -25,11 +25,11 @@ newer. In a checkout, install the dependencies first:
 npm install
 ```
 
-From the npm package they are available as `npx svgexport` and `npx
-svgmetrics`, or directly as `svgexport` and `svgmetrics` after `npm install -g
+From the npm package they are available as `npx svgexport`, `npx svgmetrics`
+and `npx bpmnexport`, or directly by their names after `npm install -g
 cpee-layout`.
 
-Both take a CPEE model (root `<description>`) or a testset, which contains the
+All take a CPEE model (root `<description>`) or a testset, which contains the
 model as a `<description>` in the `http://cpee.org/ns/description/1.0` namespace.
 The preset theme is used by default, `-lr` uses presetlr (left to right).
 
@@ -72,5 +72,21 @@ metrics are too: rows follow the branches and columns the flow.
 
 ```sh
 bin/svgmetrics model.xml > model.json
+```
+
+### bpmnexport
+
+```sh
+bin/bpmnexport [-lr] [-o FILE] MODEL|TESTSET
+```
+
+Writes the model as BPMN XML with diagram interchange, laid out as drawn:
+build-bpmn2.js converts the metrics (see svgmetrics), so every symbol and
+label is where the SVG has it. In the browser, build-bpmn2.js provides the same
+as `bpmn2_convert(pos_matrix, con_list, lr, geometry)`, which returns the XML.
+
+```sh
+bin/bpmnexport model.xml > model.bpmn
+bin/bpmnexport -lr -o model-lr.bpmn model.xml
 ```
 
