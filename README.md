@@ -31,7 +31,7 @@ cpee-layout`.
 
 All take a CPEE model (root `<description>`) or a testset, which contains the
 model as a `<description>` in the `http://cpee.org/ns/description/1.0` namespace.
-The preset theme is used by default, `-lr` uses presetlr (left to right).
+`-` reads it from stdin instead of a file. The preset theme is used by default, `-lr` uses presetlr (left to right).
 
 ### svgexport
 

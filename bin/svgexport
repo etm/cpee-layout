@@ -31,7 +31,8 @@ run('svgexport', async () => {
   const opts = parse_args(process.argv.slice(2),
     'Usage: svgexport [-lr] [-o FILE] [--embed-font] MODEL|TESTSET\n' +
     '\n' +
-    '  MODEL|TESTSET   CPEE model (<description>) or testset (its <description> is used)\n' +
+    '  MODEL|TESTSET   CPEE model (<description>) or testset (its <description> is used),\n' +
+    '                  - reads it from stdin\n' +
     '  -lr             use the presetlr theme (left to right) instead of preset\n' +
     '  -o FILE         write the SVG to FILE instead of stdout\n' +
     '  --embed-font    embed AdwaitaSans-Regular.ttf, otherwise the font has to be installed\n',
