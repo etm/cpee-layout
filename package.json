@@ -1,6 +1,6 @@
 {
   "name": "cpee-layout",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Themable, flexible BPMN auto-layout library used by the Cloud Process Execution Engine (cpee.org). Visualization and editing.",
   "keywords": ["bpmn", "layout", "svg", "process", "workflow", "cpee"],
   "homepage": "https://github.com/etm/cpee-layout",
