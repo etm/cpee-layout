@@ -1,6 +1,5 @@
 cp ../cpee/cockpit/js/wfadaptor.js .
 cp ../cpee/cockpit/css/wfadaptor.css .
-cp ../cpee/cockpit/js/build-bpmn2.js .
 cp ../cpee/cockpit/js/extended_columns.js .
 cp ../cpee/cockpit/css/extended_columns-label.css .
 cp ../cpee/cockpit/css/extended_columns-svg.css .
