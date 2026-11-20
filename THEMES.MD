@@ -345,6 +345,7 @@ one-off tweaks, e.g. `style="fill:none;"`).
 | `.unknown` | Fallback style used for the placeholder icon when an element type can't be resolved. |
 | `.gen` | `fill:ButtonFace` themed generic/system look — rarely used directly in icons. |
 | `.standwithout` / `.standtrans` | Background-colored fill only, no stroke rule of its own — thin helper classes for shapes that only need a fill. |
+| `.standline` | Dark stroke (`stroke-width:1.6`, round caps and joins), no fill rule of its own — for `<line>`s, e.g. the top and bottom border of `call.svg`'s `part-middle`, usually combined with `.execstyle`. |
 | `.edge` (on `<line>`/`<path>`) | The connection/arrow line style (`stroke-width:2`, no fill). Applied automatically by `draw_connection`, not something you put in an icon file. |
 | `.block` (on the border `<rect>`) | The dashed outline box drawn by `draw_border` (`border: 'visual' \| 'structural'`). Applied automatically, not authored in an icon. |
 | `.tile` (on the background `<rect>`) | The translucent highlight box drawn by `draw_tile` for every `type: 'complex'` element. Applied automatically. |
